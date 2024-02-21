@@ -51,17 +51,17 @@ cron.schedule("0 * * * *", async () => {
   // console.log("toLocaleTimeString->", _time);
   // console.log("toLocaleDateString->", _date);
   // Check if the time is 8:00 AM
-  if (time === "22:00") {
+  if (time === "09:00") {
     // Send out the email
     console.log("------------------------");
     // console.log("Start-----> schedule time ", time);
     await getFbYesterdaySendToLine(fb_accessToken, time); // report message yerterday
     await getFbSevenDaySendToLine(fb_accessToken, time); // report message 7d
   }
-  if (time === "23:00") {
-    console.log("------------------------");
-    await getFbTodaySendToLine(fb_accessToken, time); // report message today
-  }
+  // if (time === "23:00") {
+  //   console.log("------------------------");
+  //   await getFbTodaySendToLine(fb_accessToken, time); // report message today
+  // }
 });
 
 app.get("/", (req, res) => {
@@ -235,132 +235,132 @@ async function getFbYesterdaySendToLine(fb_accessToken, time) {
 }
 
 // Report Message Today
-async function getFbTodaySendToLine(fb_accessToken, time) {
-  const token = fb_accessToken;
-  let arr = [];
-  let dataPush = [];
-  let dataPush2 = [];
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url:
-      "https://graph.facebook.com/v19.0/" +
-      fb_act +
-      "/insights?sort=reach_descending&level=ad&fields=" +
-      fb_fields +
-      "&access_token=" +
-      token +
-      // "&date_preset=last_7d",
-      // "&date_preset=today",
-      "&date_preset=" +
-      _today,
-    headers: {
-      Cookie: "ps_l=0; ps_n=0",
-    },
-  };
+// async function getFbTodaySendToLine(fb_accessToken, time) {
+//   const token = fb_accessToken;
+//   let arr = [];
+//   let dataPush = [];
+//   let dataPush2 = [];
+//   let config = {
+//     method: "get",
+//     maxBodyLength: Infinity,
+//     url:
+//       "https://graph.facebook.com/v19.0/" +
+//       fb_act +
+//       "/insights?sort=reach_descending&level=ad&fields=" +
+//       fb_fields +
+//       "&access_token=" +
+//       token +
+//       // "&date_preset=last_7d",
+//       // "&date_preset=today",
+//       "&date_preset=" +
+//       _today,
+//     headers: {
+//       Cookie: "ps_l=0; ps_n=0",
+//     },
+//   };
 
-  await axios
-    .request(config)
-    .then((response) => {
-      arr = response.data.data;
+//   await axios
+//     .request(config)
+//     .then((response) => {
+//       arr = response.data.data;
 
-      //
-      Object.keys(arr).forEach((key) => {
-        if (arr[key].campaign_name == _campaign_name_filter) {
-          dataPush.push({
-            adset_name: arr[key].adset_name,
-            impressions: arr[key].impressions,
-            ad_name: arr[key].ad_name,
-            messageCount: arr[key].actions, // "action_type": "onsite_conversion.total_messaging_connection"
-          });
+//       //
+//       Object.keys(arr).forEach((key) => {
+//         if (arr[key].campaign_name == _campaign_name_filter) {
+//           dataPush.push({
+//             adset_name: arr[key].adset_name,
+//             impressions: arr[key].impressions,
+//             ad_name: arr[key].ad_name,
+//             messageCount: arr[key].actions, // "action_type": "onsite_conversion.total_messaging_connection"
+//           });
 
-          arr[key].actions.forEach((getData, i) => {
-            if (
-              getData.action_type === fb_total_messaging_connection
-              //"onsite_conversion.total_messaging_connection"
-            ) {
-              dataPush2.push({
-                campaign_name: arr[key].campaign_name,
-                adset_name: arr[key].adset_name,
-                impressions: arr[key].impressions,
-                ad_name: arr[key].ad_name,
-                action_type: getData.action_type,
-                value: getData.value,
-              });
-            }
-            //
+//           arr[key].actions.forEach((getData, i) => {
+//             if (
+//               getData.action_type === fb_total_messaging_connection
+//               //"onsite_conversion.total_messaging_connection"
+//             ) {
+//               dataPush2.push({
+//                 campaign_name: arr[key].campaign_name,
+//                 adset_name: arr[key].adset_name,
+//                 impressions: arr[key].impressions,
+//                 ad_name: arr[key].ad_name,
+//                 action_type: getData.action_type,
+//                 value: getData.value,
+//               });
+//             }
+//             //
 
-            //
-          });
-        }
+//             //
+//           });
+//         }
 
-        //
-      });
-      // console.log("dataPush2.length--> ", dataPush2.length);
-      const arr_labels = [];
+//         //
+//       });
+//       // console.log("dataPush2.length--> ", dataPush2.length);
+//       const arr_labels = [];
 
-      dataPush2.forEach((e, i) => {
-        arr_labels.push({
-          _ad_name: e.ad_name,
-          _value: e.value,
-        });
-      });
-      console.log("dataPush2.length--> ", dataPush2.length);
+//       dataPush2.forEach((e, i) => {
+//         arr_labels.push({
+//           _ad_name: e.ad_name,
+//           _value: e.value,
+//         });
+//       });
+//       console.log("dataPush2.length--> ", dataPush2.length);
 
-      const arr_labels_chart = [];
-      const arr_data_chart = [];
-      dataPush2.forEach((e, i) => {
-        //console.log("e--> ", e);
-        arr_labels_chart.push(e.ad_name);
-        arr_data_chart.push(e.value);
-      });
-      console.log("arr_labels_chart--> ", arr_labels_chart);
+//       const arr_labels_chart = [];
+//       const arr_data_chart = [];
+//       dataPush2.forEach((e, i) => {
+//         //console.log("e--> ", e);
+//         arr_labels_chart.push(e.ad_name);
+//         arr_data_chart.push(e.value);
+//       });
+//       console.log("arr_labels_chart--> ", arr_labels_chart);
 
-      // gen chart *********************
-      const myChart = new ChartJsImage();
-      myChart.setConfig({
-        //type: "bar",
-        type: "doughnut",
-        data: {
-          labels: arr_labels_chart,
-          datasets: [
-            {
-              label: "My First Dataset",
-              data: arr_data_chart,
-              backgroundColor: [
-                "rgb(255, 99, 132)",
-                "rgb(54, 162, 235)",
-                "rgb(255, 205, 86)",
-                "rgb(255, 0, 0)",
-                "rgb(0, 255, 0)",
-                "rgb(0, 0, 255)",
-              ],
-              hoverOffset: 2,
-            },
-          ],
-        },
-        options: {
-          title: {
-            display: true,
-            text: " รายงานจำนวนข้อความ เมื่อวาน | " + _date + ":" + time,
-          },
-        },
-      });
+//       // gen chart *********************
+//       const myChart = new ChartJsImage();
+//       myChart.setConfig({
+//         //type: "bar",
+//         type: "doughnut",
+//         data: {
+//           labels: arr_labels_chart,
+//           datasets: [
+//             {
+//               label: "My First Dataset",
+//               data: arr_data_chart,
+//               backgroundColor: [
+//                 "rgb(255, 99, 132)",
+//                 "rgb(54, 162, 235)",
+//                 "rgb(255, 205, 86)",
+//                 "rgb(255, 0, 0)",
+//                 "rgb(0, 255, 0)",
+//                 "rgb(0, 0, 255)",
+//               ],
+//               hoverOffset: 2,
+//             },
+//           ],
+//         },
+//         options: {
+//           title: {
+//             display: true,
+//             text: " รายงานจำนวนข้อความ เมื่อวาน | " + _date + ":" + time,
+//           },
+//         },
+//       });
 
-      myChart.toFile("./tmp/FbChartReportYesterday.png");
+//       myChart.toFile("./tmp/FbChartReportYesterday.png");
 
-      myChart.getShortUrl().then((short_url_image) => {
-        console.log("short_url_image--> ", short_url_image);
-        // line send
-        sendImageToLineNotify(short_url_image, time, _date);
-      });
+//       myChart.getShortUrl().then((short_url_image) => {
+//         console.log("short_url_image--> ", short_url_image);
+//         // line send
+//         sendImageToLineNotify(short_url_image, time, _date);
+//       });
 
-      // End gen chart *********************
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+//       // End gen chart *********************
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
 // Report Message 7D
 async function getFbSevenDaySendToLine(fb_accessToken, time) {
