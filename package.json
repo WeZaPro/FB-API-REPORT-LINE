@@ -1,0 +1,29 @@
+{
+  "name": "nodega4-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "build": "npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-analytics/data": "^4.4.0",
+    "axios": "^1.6.7",
+    "chartjs-to-image": "^1.2.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "googleapis": "^133.0.0",
+    "moment-timezone": "^0.5.45",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.0.3",
+    "path": "^0.12.7",
+    "request": "^2.88.2"
+  }
+}
