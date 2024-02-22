@@ -14,7 +14,8 @@ const fb_act = process.env.facebook_acc_id; //business ads id
 const fb_fields =
   "campaign_name,adset_name,ad_name,reach, impressions,clicks,cpc,ctr,actions, conversions";
 const fb_total_messaging_connection =
-  "onsite_conversion.total_messaging_connection";
+  "onsite_conversion.messaging_conversation_started_7d";
+// "onsite_conversion.total_messaging_connection";
 const fb_accessToken = process.env.FB_ACCESS_TOKEN;
 const _campaign_name_filter =
   "Run-Cam-การมีส่วนร่วม-ข้อความ-PageView-จากWeb-ข้อความ-ข้อมูลจากWeb";
@@ -163,9 +164,7 @@ async function getFbYesterdaySendToLine() {
       const chartData = [];
       dataPush3.forEach((e, i) => {
         e.messageCount.forEach((ee, ii) => {
-          if (
-            ee.action_type === "onsite_conversion.total_messaging_connection"
-          ) {
+          if (ee.action_type === fb_total_messaging_connection) {
             chartData.push({
               label: e.ad_name,
               data: ee.value,
@@ -289,9 +288,7 @@ async function getFbSevenDaySendToLine() {
       const chartData = [];
       dataPush3.forEach((e, i) => {
         e.messageCount.forEach((ee, ii) => {
-          if (
-            ee.action_type === "onsite_conversion.total_messaging_connection"
-          ) {
+          if (ee.action_type === fb_total_messaging_connection) {
             chartData.push({
               label: e.ad_name,
               data: ee.value,
@@ -420,9 +417,7 @@ async function getFbTodaySendToLine() {
       const chartData = [];
       dataPush3.forEach((e, i) => {
         e.messageCount.forEach((ee, ii) => {
-          if (
-            ee.action_type === "onsite_conversion.total_messaging_connection"
-          ) {
+          if (ee.action_type === fb_total_messaging_connection) {
             chartData.push({
               label: e.ad_name,
               data: ee.value,
