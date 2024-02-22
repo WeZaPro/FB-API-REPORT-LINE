@@ -52,11 +52,11 @@ console.log(rptToday);
 // Create a cronjob that runs every hour
 cron.schedule("0 * * * *", async () => {
   const time = moment().tz("Asia/Bangkok").format("HH:mm");
-  if (time === "13:00") {
+  if (time === "10:00") {
     console.log("------------------------");
     await getFbYesterdaySendToLine();
     await getFbSevenDaySendToLine();
-  } else if (time === "14:00") {
+  } else if (time === "22:00") {
     console.log("------------------------");
     await getFbTodaySendToLine();
   }
